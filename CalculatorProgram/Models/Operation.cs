@@ -1,4 +1,4 @@
-﻿namespace CalculatorLibrary.Models;  
+﻿namespace CalculatorLibrary.Models;
 
 internal class Operation
 {
@@ -6,7 +6,6 @@ internal class Operation
     public double Operand1 { get; set; }
     public double Operand2 { get; set; } // Optional for unary operations
     public double Result { get; set; }
-    
 
     public double GetResult()
     {
@@ -29,7 +28,5 @@ public enum OperationType
     Tangent,
     Cotangent,
     Secant,
-    Cosecant
+    Cosecant,
 }
-
-
