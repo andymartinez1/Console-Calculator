@@ -8,7 +8,6 @@ public class Menu
     internal void ShowMenu()
     {
         var isGameOn = true;
-        var calculationCount = 0;
 
         var calculator = new CalculatorEngine();
 
@@ -39,7 +38,7 @@ public class Menu
                 case "View History":
                     AnsiConsole.Clear();
                     Helpers.PrintCalculationList();
-                    continue;
+                    break;
                 case "Add Numbers":
                     AnsiConsole.Clear();
                     CalculatorEngine.AddOperation();

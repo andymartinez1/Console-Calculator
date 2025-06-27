@@ -47,35 +47,37 @@ public class Helpers
         Console.Clear();
         if (calculationList.Count == 0)
         {
-            Console.WriteLine("No calculations have been performed yet.");
+            AnsiConsole.WriteLine("No calculations have been performed yet.");
             return;
         }
 
-        Console.WriteLine("----------------------------------------------------\n");
-        Console.WriteLine("\t Calculation History:\n");
+        AnsiConsole.WriteLine("----------------------------------------------------\n");
+        AnsiConsole.WriteLine("\t Calculation History:\n");
         foreach (var calculation in calculationList)
-            Console.WriteLine($"\t {calculation}");
+            AnsiConsole.WriteLine($"\t {calculation}");
 
+        AnsiConsole.WriteLine("\n----------------------------------------------------\n");
+        PrintCalculationCount();
         DeleteCalculationList();
     }
 
     public static void DeleteCalculationList()
     {
-        Console.WriteLine("\n----------------------------------------------------\n");
-        Console.WriteLine("Would you like to clear the history? (y/n)");
-        var clearHistory = Console.ReadLine()?.Trim().ToLower();
-        if (clearHistory == "y")
+        AnsiConsole.WriteLine("\n----------------------------------------------------\n");
+        var clearHistory = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title("Do you want to clear the calculation history?")
+                .AddChoices("Yes", "No")
+        );
+
+        if (clearHistory == "Yes")
         {
             calculationList.Clear();
-            Console.WriteLine("Calculation history cleared.");
+            AnsiConsole.WriteLine("Calculation history cleared.");
         }
-        else if (clearHistory == "n")
+        else if (clearHistory == "No")
         {
-            Console.WriteLine("Calculation history retained.");
-        }
-        else
-        {
-            Console.WriteLine("Invalid input. Calculation history retained.");
+            AnsiConsole.WriteLine("Calculation history retained.");
         }
     }
 
@@ -125,5 +127,24 @@ public class Helpers
         }
 
         return cleanNum;
+    }
+
+    internal static void PrintCalculationCount()
+    {
+        AnsiConsole.WriteLine($"Calculator used {calculationList.Count} times");
+    }
+
+    public static void SaveCalculationHistoryToFile(string filePath)
+    {
+        try
+        {
+            var json = JsonConvert.SerializeObject(calculationList, Formatting.Indented);
+            File.WriteAllText(filePath, json);
+            AnsiConsole.WriteLine("Calculation history saved successfully.");
+        }
+        catch (Exception ex)
+        {
+            AnsiConsole.WriteLine($"Error saving calculation history: {ex.Message}");
+        }
     }
 }
