@@ -3,9 +3,9 @@ using Spectre.Console;
 
 namespace CalculatorLibrary;
 
-public class Helpers
+internal class Helpers
 {
-    public static List<string> calculationList = new();
+    internal static List<string> calculationList = new();
 
     public static void PrintTwoNumberCalculation(
         double num1,
@@ -28,19 +28,20 @@ public class Helpers
         return calculation;
     }
 
-    // public static double GetPreviousResult()
-    // {
-    //     var previousResults = calculationList;
-    //     var resultsArray = previousResults.Select(x => double.Parse(x)).ToArray();
-    //
-    //     var userChoice = AnsiConsole.Prompt(
-    //         new SelectionPrompt<string>()
-    //             .Title("Please select a calculation to use as input:")
-    //             .AddChoices(resultsArray)
-    //     );
-    //
-    //     return userChoice;
-    // }
+    public static double GetPreviousResult(List<double> previousResults)
+    {
+        AnsiConsole.WriteLine("Type the index of the previous result:");
+
+        for (int index = 1; index < previousResults.Count; index++)
+        {
+            double result = previousResults[index - 1];
+            Console.WriteLine($"{index}: {result}");
+        }
+
+        var userChoice = Console.ReadLine();
+
+        return previousResults[int.Parse(userChoice) - 1];
+    }
 
     public static void PrintCalculationList()
     {
@@ -58,6 +59,8 @@ public class Helpers
 
         AnsiConsole.WriteLine("\n----------------------------------------------------\n");
         PrintCalculationCount();
+        AnsiConsole.WriteLine("\n----------------------------------------------------\n");
+        // GetPreviousResult(calculationList);
         DeleteCalculationList();
     }
 

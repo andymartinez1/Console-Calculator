@@ -10,13 +10,13 @@ internal class Operation
 
 public enum OperationType
 {
-    Addition,
-    Subtraction,
-    Multiplication,
-    Division,
-    Exponentiation,
-    SquareRoot,
-    Sine,
-    Cosine,
-    Tangent,
+    Addition = '+',
+    Subtraction = '-',
+    Multiplication = '*',
+    Division = '/',
+    Exponentiation = '^',
+    SquareRoot = '√',
+    Sine = 's',
+    Cosine = 'c',
+    Tangent = 't',
 }
