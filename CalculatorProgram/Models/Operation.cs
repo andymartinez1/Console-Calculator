@@ -1,6 +1,6 @@
 ﻿namespace CalculatorLibrary.Models;
 
-internal class Operation
+internal class Operation(OperationType operationType)
 {
     public OperationType OperationType { get; set; }
     public double Operand1 { get; set; }
@@ -10,13 +10,13 @@ internal class Operation
 
 public enum OperationType
 {
-    Addition = '+',
-    Subtraction = '-',
-    Multiplication = '*',
-    Division = '/',
-    Exponentiation = '^',
-    SquareRoot = '√',
-    Sine = 's',
-    Cosine = 'c',
-    Tangent = 't',
+    Addition,
+    Subtraction,
+    Multiplication,
+    Division,
+    Exponentiation,
+    SquareRoot,
+    Sine,
+    Cosine,
+    Tangent,
 }
