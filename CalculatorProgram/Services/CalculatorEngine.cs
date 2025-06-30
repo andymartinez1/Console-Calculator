@@ -6,10 +6,10 @@ namespace CalculatorLibrary;
 
 public class CalculatorEngine
 {
-    private readonly JsonWriter writer;
     internal static List<double> Results = new();
+    private static readonly JsonWriter writer;
 
-    public CalculatorEngine()
+    static CalculatorEngine()
     {
         var logFile = File.CreateText("calculatorlog.json");
         logFile.AutoFlush = true;
@@ -20,78 +20,77 @@ public class CalculatorEngine
         writer.WriteStartArray();
     }
 
-    internal static double BasicOperations(OperationType operationType)
+    public static double BasicOperations(OperationType operationType)
     {
-        Operation operation = new Operation(operationType);
+        var operation = new Operation(operationType);
 
         var twoNumbers = Helpers.GetTwoNumbers();
         operation.Operand1 = twoNumbers[0];
         operation.Operand2 = twoNumbers[1];
+        var num1 = operation.Operand1;
+        var num2 = operation.Operand2;
+
+        writer.WriteStartObject();
+        writer.WritePropertyName("Operand1");
+        writer.WriteValue(num1);
+        writer.WritePropertyName("Operand2");
+        writer.WriteValue(num2);
+        writer.WritePropertyName("Operation");
 
         if (operationType == OperationType.Addition)
         {
-            operation.Result = (double)(operation.Operand1 + operation.Operand2);
-            Helpers.PrintTwoNumberCalculation(
-                operation.Operand1,
-                (double)operation.Operand2,
-                "+",
-                operation.Result
-            );
-            Helpers.AddToCalculationList(
-                $"{operation.Operand1} + {operation.Operand2} = {operation.Result}"
-            );
+            operation.Result = (double)(num1 + num2);
+            Helpers.PrintTwoNumberCalculation(num1, (double)num2, "+", operation.Result);
+            Helpers.AddToCalculationList($"{num1} + {num2} = {operation.Result}");
+            Results.Add(operation.Result);
+            writer.WriteValue("Addition");
+            writer.WritePropertyName("Result");
+            writer.WriteValue(operation.Result);
+            writer.WriteEndObject();
         }
         else if (operationType == OperationType.Subtraction)
         {
-            operation.Result = (double)(operation.Operand1 - operation.Operand2);
-            Helpers.PrintTwoNumberCalculation(
-                operation.Operand1,
-                (double)operation.Operand2,
-                "-",
-                operation.Result
-            );
-            Helpers.AddToCalculationList(
-                $"{operation.Operand1} - {operation.Operand2} = {operation.Result}"
-            );
+            operation.Result = (double)(num1 - num2);
+            Helpers.PrintTwoNumberCalculation(num1, (double)num2, "-", operation.Result);
+            Helpers.AddToCalculationList($"{num1} - {num2} = {operation.Result}");
+            Results.Add(operation.Result);
+            writer.WriteValue("Subtraction");
+            writer.WritePropertyName("Result");
+            writer.WriteValue(operation.Result);
+            writer.WriteEndObject();
         }
         else if (operationType == OperationType.Multiplication)
         {
-            operation.Result = (double)(operation.Operand1 * operation.Operand2);
-            Helpers.PrintTwoNumberCalculation(
-                operation.Operand1,
-                (double)operation.Operand2,
-                "*",
-                operation.Result
-            );
-            Helpers.AddToCalculationList(
-                $"{operation.Operand1} * {operation.Operand2} = {operation.Result}"
-            );
+            operation.Result = (double)(num1 * num2);
+            Helpers.PrintTwoNumberCalculation(num1, (double)num2, "*", operation.Result);
+            Helpers.AddToCalculationList($"{num1} * {num2} = {operation.Result}");
+            Results.Add(operation.Result);
+            writer.WriteValue("Multiplication");
+            writer.WritePropertyName("Result");
+            writer.WriteValue(operation.Result);
+            writer.WriteEndObject();
         }
         else if (operationType == OperationType.Division)
         {
-            operation.Result = (double)(operation.Operand1 / operation.Operand2);
-            Helpers.PrintTwoNumberCalculation(
-                operation.Operand1,
-                (double)operation.Operand2,
-                "/",
-                operation.Result
-            );
-            Helpers.AddToCalculationList(
-                $"{operation.Operand1} / {operation.Operand2} = {operation.Result}"
-            );
+            operation.Result = (double)(num1 / num2);
+            Helpers.PrintTwoNumberCalculation(num1, (double)num2, "/", operation.Result);
+            Helpers.AddToCalculationList($"{num1} / {num2} = {operation.Result}");
+            Results.Add(operation.Result);
+            writer.WriteValue("Division");
+            writer.WritePropertyName("Result");
+            writer.WriteValue(operation.Result);
+            writer.WriteEndObject();
         }
         else if (operationType == OperationType.Exponentiation)
         {
-            operation.Result = Math.Pow(operation.Operand1, (double)operation.Operand2);
-            Helpers.PrintTwoNumberCalculation(
-                operation.Operand1,
-                (double)operation.Operand2,
-                "^",
-                operation.Result
-            );
-            Helpers.AddToCalculationList(
-                $"{operation.Operand1} ^ {operation.Operand2} = {operation.Result}"
-            );
+            operation.Result = Math.Pow(num1, (double)num2);
+            Helpers.PrintTwoNumberCalculation(num1, (double)num2, "^", operation.Result);
+            Helpers.AddToCalculationList($"{num1} ^ {num2} = {operation.Result}");
+            Results.Add(operation.Result);
+            writer.WriteValue("Exponentiation");
+            writer.WritePropertyName("Result");
+            writer.WriteValue(operation.Result);
+            writer.WriteEndObject();
         }
 
         return operation.Result;
@@ -99,40 +98,67 @@ public class CalculatorEngine
 
     internal static double AdvancedOperations(OperationType operationType)
     {
-        Operation operation = new Operation(operationType);
+        var operation = new Operation(operationType);
 
         operation.Operand1 = Helpers.GetSingleNumber();
+        var num1 = operation.Operand1;
+
+        writer.WriteStartObject();
+        writer.WritePropertyName("Operand1");
+        writer.WriteValue(num1);
+        writer.WritePropertyName("Operation");
 
         if (operationType == OperationType.SquareRoot)
         {
-            if (operation.Operand1 < 0)
+            if (num1 < 0)
             {
                 AnsiConsole.WriteLine(
                     "Cannot calculate the square root of a negative number. Please try again."
                 );
-                operation.Operand1 = Helpers.GetSingleNumber();
+                num1 = Helpers.GetSingleNumber();
             }
-            operation.Result = Math.Sqrt(operation.Operand1);
-            Helpers.PrintSingleNumberCalculation(operation.Operand1, "√", operation.Result);
-            Helpers.AddToCalculationList($"√{operation.Operand1} = {operation.Result}");
+
+            operation.Result = Math.Sqrt(num1);
+            Helpers.PrintSingleNumberCalculation(num1, "√", operation.Result);
+            Helpers.AddToCalculationList($"√{num1} = {operation.Result}");
+            Results.Add(operation.Result);
+            writer.WriteValue("SquareRoot");
+            writer.WritePropertyName("Result");
+            writer.WriteValue(operation.Result);
+            writer.WriteEndObject();
         }
         else if (operationType == OperationType.Sine)
         {
-            operation.Result = Math.Sin(operation.Operand1);
-            Helpers.PrintSingleNumberCalculation(operation.Operand1, "sin", operation.Result);
-            Helpers.AddToCalculationList($"sin({operation.Operand1}) = {operation.Result}");
+            operation.Result = Math.Sin(num1);
+            Helpers.PrintSingleNumberCalculation(num1, "sin", operation.Result);
+            Helpers.AddToCalculationList($"sin({num1}) = {operation.Result}");
+            Results.Add(operation.Result);
+            writer.WriteValue("Sine");
+            writer.WritePropertyName("Result");
+            writer.WriteValue(operation.Result);
+            writer.WriteEndObject();
         }
         else if (operationType == OperationType.Cosine)
         {
-            operation.Result = Math.Cos(operation.Operand1);
-            Helpers.PrintSingleNumberCalculation(operation.Operand1, "cos", operation.Result);
-            Helpers.AddToCalculationList($"cos({operation.Operand1}) = {operation.Result}");
+            operation.Result = Math.Cos(num1);
+            Helpers.PrintSingleNumberCalculation(num1, "cos", operation.Result);
+            Helpers.AddToCalculationList($"cos({num1}) = {operation.Result}");
+            Results.Add(operation.Result);
+            writer.WriteValue("Cosine");
+            writer.WritePropertyName("Result");
+            writer.WriteValue(operation.Result);
+            writer.WriteEndObject();
         }
         else if (operationType == OperationType.Tangent)
         {
-            operation.Result = Math.Tan(operation.Operand1);
-            Helpers.PrintSingleNumberCalculation(operation.Operand1, "tan", operation.Result);
-            Helpers.AddToCalculationList($"tan({operation.Operand1}) = {operation.Result}");
+            operation.Result = Math.Tan(num1);
+            Helpers.PrintSingleNumberCalculation(num1, "tan", operation.Result);
+            Helpers.AddToCalculationList($"tan({num1}) = {operation.Result}");
+            Results.Add(operation.Result);
+            writer.WriteValue("Tangent");
+            writer.WritePropertyName("Result");
+            writer.WriteValue(operation.Result);
+            writer.WriteEndObject();
         }
 
         return operation.Result;

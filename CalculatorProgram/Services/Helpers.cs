@@ -30,17 +30,13 @@ internal class Helpers
 
     public static double GetPreviousResult(List<double> previousResults)
     {
-        AnsiConsole.WriteLine("Type the index of the previous result:");
+        var option = AnsiConsole.Prompt(
+            new SelectionPrompt<double>()
+                .Title("Please choose a result: ")
+                .AddChoices(previousResults)
+        );
 
-        for (int index = 1; index < previousResults.Count; index++)
-        {
-            double result = previousResults[index - 1];
-            Console.WriteLine($"{index}: {result}");
-        }
-
-        var userChoice = Console.ReadLine();
-
-        return previousResults[int.Parse(userChoice) - 1];
+        return option;
     }
 
     public static void PrintCalculationList()
@@ -59,8 +55,6 @@ internal class Helpers
 
         AnsiConsole.WriteLine("\n----------------------------------------------------\n");
         PrintCalculationCount();
-        AnsiConsole.WriteLine("\n----------------------------------------------------\n");
-        // GetPreviousResult(calculationList);
         DeleteCalculationList();
     }
 
@@ -76,6 +70,7 @@ internal class Helpers
         if (clearHistory == "Yes")
         {
             calculationList.Clear();
+            CalculatorEngine.Results.Clear();
             AnsiConsole.WriteLine("Calculation history cleared.");
         }
         else if (clearHistory == "No")
@@ -90,8 +85,29 @@ internal class Helpers
         var input2 = "";
         var result = new double[2];
 
-        Console.WriteLine("Enter your first number: ");
-        input1 = Console.ReadLine();
+        if (calculationList.Count == 0)
+        {
+            Console.WriteLine("Enter your first number: ");
+            input1 = Console.ReadLine();
+        }
+        else
+        {
+            var usePreviousResult = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("Do you want to use a previous result?")
+                    .AddChoices("Yes", "No")
+            );
+
+            if (usePreviousResult == "Yes")
+            {
+                input1 = GetPreviousResult(CalculatorEngine.Results).ToString();
+            }
+            else
+            {
+                Console.WriteLine("Enter your first number: ");
+                input1 = Console.ReadLine();
+            }
+        }
 
         double cleanNum1 = 0;
         while (!double.TryParse(input1, out cleanNum1))
@@ -120,8 +136,29 @@ internal class Helpers
         var input = "";
         double cleanNum = 0;
 
-        Console.WriteLine("Enter your number: ");
-        input = Console.ReadLine();
+        if (calculationList.Count == 0)
+        {
+            Console.WriteLine("Enter your first number: ");
+            input = Console.ReadLine();
+        }
+        else
+        {
+            var usePreviousResult = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("Do you want to use a previous result?")
+                    .AddChoices("Yes", "No")
+            );
+
+            if (usePreviousResult == "Yes")
+            {
+                input = GetPreviousResult(CalculatorEngine.Results).ToString();
+            }
+            else
+            {
+                Console.WriteLine("Enter your first number: ");
+                input = Console.ReadLine();
+            }
+        }
 
         while (!double.TryParse(input, out cleanNum))
         {
