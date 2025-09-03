@@ -1,8 +1,8 @@
-﻿using CalculatorLibrary;
-using CalculatorLibrary.Models;
+﻿using Calculator.Models;
+using Calculator.Services;
 using Spectre.Console;
 
-namespace CalculatorProgram;
+namespace Calculator.Views;
 
 public class Menu
 {
@@ -10,7 +10,7 @@ public class Menu
     {
         var isGameOn = true;
 
-        var calculator = new CalculatorEngine();
+        var calculator = new CalculatorService();
 
         AnsiConsole.Write(new FigletText("Calculator").Color(Color.Green));
 
@@ -42,39 +42,39 @@ public class Menu
                     break;
                 case "Add Numbers":
                     AnsiConsole.Clear();
-                    CalculatorEngine.BasicOperations(OperationType.Addition);
+                    CalculatorService.BasicOperations(OperationType.Addition);
                     break;
                 case "Subtract Numbers":
                     AnsiConsole.Clear();
-                    CalculatorEngine.BasicOperations(OperationType.Subtraction);
+                    CalculatorService.BasicOperations(OperationType.Subtraction);
                     break;
                 case "Multiply Numbers":
                     AnsiConsole.Clear();
-                    CalculatorEngine.BasicOperations(OperationType.Multiplication);
+                    CalculatorService.BasicOperations(OperationType.Multiplication);
                     break;
                 case "Divide Numbers":
                     AnsiConsole.Clear();
-                    CalculatorEngine.BasicOperations(OperationType.Division);
+                    CalculatorService.BasicOperations(OperationType.Division);
                     break;
                 case "Exponentiate Numbers":
                     AnsiConsole.Clear();
-                    CalculatorEngine.BasicOperations(OperationType.Exponentiation);
+                    CalculatorService.BasicOperations(OperationType.Exponentiation);
                     break;
                 case "Square Root":
                     AnsiConsole.Clear();
-                    CalculatorEngine.AdvancedOperations(OperationType.SquareRoot);
+                    CalculatorService.AdvancedOperations(OperationType.SquareRoot);
                     break;
                 case "Sine":
                     AnsiConsole.Clear();
-                    CalculatorEngine.AdvancedOperations(OperationType.Sine);
+                    CalculatorService.AdvancedOperations(OperationType.Sine);
                     break;
                 case "Cosine":
                     AnsiConsole.Clear();
-                    CalculatorEngine.AdvancedOperations(OperationType.Cosine);
+                    CalculatorService.AdvancedOperations(OperationType.Cosine);
                     break;
                 case "Tangent":
                     AnsiConsole.Clear();
-                    CalculatorEngine.AdvancedOperations(OperationType.Tangent);
+                    CalculatorService.AdvancedOperations(OperationType.Tangent);
                     break;
                 case "Exit Program":
                     AnsiConsole.Clear();

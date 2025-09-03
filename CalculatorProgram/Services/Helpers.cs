@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Spectre.Console;
 
-namespace CalculatorLibrary;
+namespace Calculator.Services;
 
 internal class Helpers
 {
@@ -22,10 +22,9 @@ internal class Helpers
         Console.WriteLine($"\t The result of {operationType} {num} is {result}\n");
     }
 
-    public static string AddToCalculationList(string calculation)
+    public static void AddToCalculationList(string calculation)
     {
         calculationList.Add(calculation);
-        return calculation;
     }
 
     public static double GetPreviousResult(List<double> previousResults)
@@ -70,7 +69,7 @@ internal class Helpers
         if (clearHistory == "Yes")
         {
             calculationList.Clear();
-            CalculatorEngine.Results.Clear();
+            CalculatorService.Results.Clear();
             AnsiConsole.WriteLine("Calculation history cleared.");
         }
         else if (clearHistory == "No")
@@ -100,7 +99,7 @@ internal class Helpers
 
             if (usePreviousResult == "Yes")
             {
-                input1 = GetPreviousResult(CalculatorEngine.Results).ToString();
+                input1 = GetPreviousResult(CalculatorService.Results).ToString();
             }
             else
             {
@@ -151,7 +150,7 @@ internal class Helpers
 
             if (usePreviousResult == "Yes")
             {
-                input = GetPreviousResult(CalculatorEngine.Results).ToString();
+                input = GetPreviousResult(CalculatorService.Results).ToString();
             }
             else
             {
@@ -169,7 +168,7 @@ internal class Helpers
         return cleanNum;
     }
 
-    internal static void PrintCalculationCount()
+    private static void PrintCalculationCount()
     {
         AnsiConsole.WriteLine($"Calculator used {calculationList.Count} times");
     }

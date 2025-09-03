@@ -1,4 +1,4 @@
-﻿namespace CalculatorLibrary.Models;
+﻿namespace Calculator.Models;
 
 internal class Operation(OperationType operationType)
 {

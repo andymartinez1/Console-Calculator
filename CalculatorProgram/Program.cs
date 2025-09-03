@@ -1,4 +1,4 @@
-﻿using CalculatorProgram;
+﻿using Calculator.Views;
 
 var menu = new Menu();
 
