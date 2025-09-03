@@ -1,11 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using Calculator.Services;
+using Newtonsoft.Json;
 using Spectre.Console;
 
-namespace Calculator.Services;
+namespace Calculator.Utils;
 
 internal class Helpers
 {
-    internal static List<string> calculationList = new();
+    private static readonly List<string> CalculationList = new();
 
     public static void PrintTwoNumberCalculation(
         double num1,
@@ -24,10 +25,10 @@ internal class Helpers
 
     public static void AddToCalculationList(string calculation)
     {
-        calculationList.Add(calculation);
+        CalculationList.Add(calculation);
     }
 
-    public static double GetPreviousResult(List<double> previousResults)
+    private static double GetPreviousResult(List<double> previousResults)
     {
         var option = AnsiConsole.Prompt(
             new SelectionPrompt<double>()
@@ -41,7 +42,7 @@ internal class Helpers
     public static void PrintCalculationList()
     {
         Console.Clear();
-        if (calculationList.Count == 0)
+        if (CalculationList.Count == 0)
         {
             AnsiConsole.WriteLine("No calculations have been performed yet.");
             return;
@@ -49,7 +50,7 @@ internal class Helpers
 
         AnsiConsole.WriteLine("----------------------------------------------------\n");
         AnsiConsole.WriteLine("\t Calculation History:\n");
-        foreach (var calculation in calculationList)
+        foreach (var calculation in CalculationList)
             AnsiConsole.WriteLine($"\t {calculation}");
 
         AnsiConsole.WriteLine("\n----------------------------------------------------\n");
@@ -57,7 +58,7 @@ internal class Helpers
         DeleteCalculationList();
     }
 
-    public static void DeleteCalculationList()
+    private static void DeleteCalculationList()
     {
         AnsiConsole.WriteLine("\n----------------------------------------------------\n");
         var clearHistory = AnsiConsole.Prompt(
@@ -66,15 +67,16 @@ internal class Helpers
                 .AddChoices("Yes", "No")
         );
 
-        if (clearHistory == "Yes")
+        switch (clearHistory)
         {
-            calculationList.Clear();
-            CalculatorService.Results.Clear();
-            AnsiConsole.WriteLine("Calculation history cleared.");
-        }
-        else if (clearHistory == "No")
-        {
-            AnsiConsole.WriteLine("Calculation history retained.");
+            case "Yes":
+                CalculationList.Clear();
+                CalculatorService.Results.Clear();
+                AnsiConsole.WriteLine("Calculation history cleared.");
+                break;
+            case "No":
+                AnsiConsole.WriteLine("Calculation history retained.");
+                break;
         }
     }
 
@@ -84,7 +86,7 @@ internal class Helpers
         var input2 = "";
         var result = new double[2];
 
-        if (calculationList.Count == 0)
+        if (CalculationList.Count == 0)
         {
             Console.WriteLine("Enter your first number: ");
             input1 = Console.ReadLine();
@@ -135,7 +137,7 @@ internal class Helpers
         var input = "";
         double cleanNum = 0;
 
-        if (calculationList.Count == 0)
+        if (CalculationList.Count == 0)
         {
             Console.WriteLine("Enter your first number: ");
             input = Console.ReadLine();
@@ -170,14 +172,14 @@ internal class Helpers
 
     private static void PrintCalculationCount()
     {
-        AnsiConsole.WriteLine($"Calculator used {calculationList.Count} times");
+        AnsiConsole.WriteLine($"Calculator used {CalculationList.Count} times");
     }
 
     public static void SaveCalculationHistoryToFile(string filePath)
     {
         try
         {
-            var json = JsonConvert.SerializeObject(calculationList, Formatting.Indented);
+            var json = JsonConvert.SerializeObject(CalculationList, Formatting.Indented);
             File.WriteAllText(filePath, json);
             AnsiConsole.WriteLine("Calculation history saved successfully.");
         }

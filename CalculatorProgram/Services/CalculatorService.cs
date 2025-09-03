@@ -1,10 +1,11 @@
 ﻿using Calculator.Models;
+using Calculator.Utils;
 using Newtonsoft.Json;
 using Spectre.Console;
 
 namespace Calculator.Services;
 
-public class CalculatorService
+public class CalculatorService : ICalculatorService
 {
     internal static readonly List<double> Results = new();
     private static readonly JsonWriter writer;
@@ -20,7 +21,7 @@ public class CalculatorService
         writer.WriteStartArray();
     }
 
-    public static void BasicOperations(OperationType operationType)
+    public void BasicOperations(OperationType operationType)
     {
         var operation = new Operation(operationType);
 
@@ -92,7 +93,7 @@ public class CalculatorService
         }
     }
 
-    internal static void AdvancedOperations(OperationType operationType)
+    public void AdvancedOperations(OperationType operationType)
     {
         var operation = new Operation(operationType);
 
